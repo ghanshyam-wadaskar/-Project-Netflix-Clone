@@ -149,7 +149,7 @@ pipeline {
     agent any
     tools {
         jdk 'jdk17'
-        nodejs 'node16'
+        nodejs 'node18'
     }
     environment {
         SCANNER_HOME = tool 'sonar-scanner'
@@ -158,7 +158,7 @@ pipeline {
 
         stage('Code-Pull') {
             steps {
-                git branch: 'main', url: 'https://github.com/itsdevopsprofile/jenkins-netflix-clone.git'
+                git branch: 'main', url: 'https://github.com/ghanshyam-wadaskar/-Project-Netflix-Clone.git'
             }
         }
         stage("Sonarqube Analysis") {
@@ -190,20 +190,20 @@ pipeline {
             steps{
                 script{
                    withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker'){   
-                       sh "docker build --build-arg TMDB_V3_API_KEY=020581a34f3ab93b1360a55bea864bd9 -t itsdevopsprofile/netflix:rise ."
-                       sh "docker push itsdevopsprofile/netflix:rise  "
+                       sh "docker build --build-arg TMDB_V3_API_KEY=020581a34f3ab93b1360a55bea864bd9 -t ghanshyamwadaskar/netflix:rise ."
+                       sh "docker push ghanshyamwadaskar/netflix:rise  "
                     }
                 }
             }
         }
         stage("TRIVY"){
             steps{
-                sh "trivy image itsdevopsprofile/netflix:rise  > trivyimage.txt" 
+                sh "trivy image ghanshyamwadaskar/netflix:rise  > trivyimage.txt" 
             }
         }
         stage('Deploy to container'){
             steps{
-                sh 'docker run -d --name netflix -p 8081:80 itsdevopsprofile/netflix:rise '
+                sh 'docker run -d --name netflix -p 8081:80 ghanshyamwadaskar/netflix:rise '
             }
         }
         
